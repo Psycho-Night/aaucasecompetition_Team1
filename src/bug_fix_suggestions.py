@@ -1,11 +1,42 @@
 import google.generativeai as genai
 import os
+import subprocess
 
 # Configure Gemini API with the API Key
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+def get_git_diff():
+    """Fetches the git diff of the latest changes."""
+    try:
+        diff_output = subprocess.run(
+            ["git", "diff", "HEAD~1"],  # Get last commit changes
+            capture_output=True,
+            text=True
+        )
+        return diff_output.stdout if diff_output.stdout else "No changes detected."
+    except Exception as e:
+        return f"⚠ Error fetching git diff: {e}"
+
+def analyze_branch_changes():
+    """Asks Gemini to review branch changes."""
+    print("🔍 Analyzing changes in branch...")
+    git_diff = get_git_diff()
+    
+    if git_diff.strip() == "No changes detected.":
+        print("⚠ No changes found.")
+        return
+
+    prompt = """Analyze the following Git diff and provide useful comments.  
+    Highlight potential issues, improvements, and missing edge cases.  
+    Keep the response structured and concise.  
+    \n\nGit Diff:\n""" + git_diff
+
+    gemini_comments = gemini_response(prompt)
+    print("\n📝 Gemini AI Review of Changes:\n")
+    print(gemini_comments)
+    
 def suggest_bug_fixes():
-    print('Analyzing code changes and suggesting bug fixes...')
+    print('🔍 Analyzing code for bugs...')
     
     # File paths
     current_file = "aaucasecompetition_Team1/src/example_code.py"
@@ -38,15 +69,15 @@ def suggest_bug_fixes():
     # Restore original filename
     os.rename(new_file, current_file)
 
-    print('✅ Finished analyzing code changes and suggesting bug fixes')
+    print('✅ Finished analyzing code and suggesting bug fixes')
 
 
-def gemini_response(code, prompt):
-    """Calls Google Gemini AI to process the code and provide suggestions."""
+def gemini_response(text):
+    """Calls Google Gemini AI to process input and generate responses."""
     model = genai.GenerativeModel("gemini-pro")
 
     try:
-        response = model.generate_content([code, prompt])
+        response = model.generate_content([text])
         
         if response.candidates:
             return response.candidates[0].content.text
@@ -58,7 +89,8 @@ def gemini_response(code, prompt):
 
 
 if __name__ == '__main__':
-    suggest_bug_fixes()
+    analyze_branch_changes()  # Step 1: Analyze branch changes
+    # suggest_bug_fixes()       # Step 2: Suggest bug fixes
     
 # import google.generativeai as genai
 # import os
