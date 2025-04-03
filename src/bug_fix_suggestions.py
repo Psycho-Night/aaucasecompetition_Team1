@@ -13,7 +13,7 @@ def get_git_diff():
             capture_output=True,
             text=True
         )
-        return diff_output.stdout if diff_output.stdout else "No changes detected."
+        return diff_output.stdout
     except Exception as e:
         return f"⚠ Error fetching git diff: {e}"
 
