@@ -12,16 +12,16 @@ def divide(a, b):
         raise ValueError("Cannot divide by zero")
     return a / b
 
-
+# Introduce a bug
 def buggy_function(x):
-    return x / 0 
+    return x / 0  # This will raise a ZeroDivisionError
 
-
+# Introduce linter errors
 def another_function( a ,b ):
     return a+b
 
-
+# Introduce another bug
 def faulty_logic(a, b):
     if a > b:
-        return b - a  
+        return b - a  # This logic might be incorrect based on the intended functionality
     return a - b
