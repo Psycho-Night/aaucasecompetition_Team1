@@ -1,4 +1,4 @@
-from google.generativeai import genai
+import google.generativeai as genai
 import os
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
