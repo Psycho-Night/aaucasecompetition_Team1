@@ -9,17 +9,22 @@ def get_git_diff():
     """Fetches the git diff, including unstaged, staged, added, and deleted files."""
     try:
         # Get the current branch name
-  
+        current_branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"], 
+            capture_output=True,
+            text=True
+        ).stdout.strip()
+
+        # Compare current branch to 'main' (or use any branch you prefer)
         diff_output = subprocess.run(
-            ["git", "diff", "HEAD~1"],  # Get last commit changes
+            ["git", "diff", f"main..{current_branch}"],  # Compare to 'main'
             capture_output=True,
             text=True
         )
 
-
         # Check for changes in staged files (added or deleted)
         staged_diff = subprocess.run(
-            ["git", "diff", "--cached", "HEAD~1"],  
+            ["git", "diff", "--cached", f"main..{current_branch}"],  # Compare staged changes to 'main'
             capture_output=True,
             text=True
         )
@@ -61,4 +66,4 @@ def gemini_response(text):
         return f"⚠ Error: {e}"
 
 if __name__ == '__main__':
-    analyze_branch_changes()  # ✅ Now handles added, deleted, and modified files
+    analyze_branch_changes()  # ✅ Now works for all changes (added, deleted, modified) and compares branches
