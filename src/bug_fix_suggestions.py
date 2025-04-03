@@ -22,7 +22,7 @@ def analyze_branch_changes():
     print("🔍 Analyzing changes in branch...")
     git_diff = get_git_diff()
     
-    if git_diff.strip() == "No changes detected.":
+    if not git_diff.strip():
         print("⚠ No changes found.")
         return
 
@@ -34,43 +34,6 @@ def analyze_branch_changes():
     gemini_comments = gemini_response(prompt)
     print("\n📝 Gemini AI Review of Changes:\n")
     print(gemini_comments)
-    
-def suggest_bug_fixes():
-    print('🔍 Analyzing code for bugs...')
-    
-    # File paths
-    current_file = "aaucasecompetition_Team1/src/example_code.py"
-    new_file = "aaucasecompetition_Team1/src/example_code.txt"    
-    save_file = "aaucasecompetition_Team1/src/new_example_code.py"  
-    
-    # Rename to temp file for processing
-    os.rename(current_file, new_file)
-
-    # Read code
-    with open(new_file, 'r', encoding="utf-8") as f:
-        code = f.read()
-
-    # AI Prompt
-    prompt = """This is Python code. Can you find any bugs?  
-    Answer only as comments in the code. Don't add anything apart from comments.  
-    Also, add a summary of the code at the beginning (commented out)."""
-
-    # Get AI-generated suggestions
-    gemini_out = gemini_response(code, prompt)
-    
-    if not gemini_out:
-        print("⚠ No output received from Gemini API")
-        return
-
-    # Save AI suggestions to a new file
-    with open(save_file, "w", encoding="utf-8") as f:
-        f.write(gemini_out)
-
-    # Restore original filename
-    os.rename(new_file, current_file)
-
-    print('✅ Finished analyzing code and suggesting bug fixes')
-
 
 def gemini_response(text):
     """Calls Google Gemini AI to process input and generate responses."""
@@ -78,18 +41,14 @@ def gemini_response(text):
 
     try:
         response = model.generate_content([text])
-        
-        if response.candidates:
-            return response.candidates[0].content.text
-        else:
-            return "⚠ No response from Gemini AI"
+        return response.text if response else "⚠ No response from Gemini AI"
     
     except Exception as e:
         return f"⚠ Error: {e}"
 
-
 if __name__ == '__main__':
-    analyze_branch_changes()  # Step 1: Analyze branch changes
+    analyze_branch_changes()  # ✅ Only analyzing branch changes
+    
     # suggest_bug_fixes()       # Step 2: Suggest bug fixes
     
 # import google.generativeai as genai
