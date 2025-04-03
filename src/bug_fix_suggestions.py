@@ -74,7 +74,7 @@ def suggest_bug_fixes():
 
 def gemini_response(text):
     """Calls Google Gemini AI to process input and generate responses."""
-    model = genai.GenerativeModel("gemini-pro")
+    model = genai.GenerativeModel("gemini-2.0-flash")
 
     try:
         response = model.generate_content([text])
