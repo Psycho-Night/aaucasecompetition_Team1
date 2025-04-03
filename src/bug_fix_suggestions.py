@@ -1,6 +1,6 @@
 from google import genai
 import os
-client = genai.Client(api_key="AIzaSyCMKJg3y8yePUP-V5xXrvHPMPlctowwC6w")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def suggest_bug_fixes():
     print('Analyzing code changes and suggesting bug fixes...')

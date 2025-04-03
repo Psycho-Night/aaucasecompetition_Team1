@@ -38,7 +38,7 @@ jobs:
           pip install google-generativeai
       - name: Generate AI Output
         env:
-          GOOGLE_API_KEY: ${{ secrets.AIzaSyCMKJg3y8yePUP-V5xXrvHPMPlctowwC6w }}
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       - name: Run bug fix suggestions script
         run: python src/bug_fix_suggestions.py
 
