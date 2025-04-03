@@ -36,12 +36,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install google-generativeai
-
-      - name: Generate AI Output
+      
+      - name: Run bug fix suggestions script
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-
-      - name: Run bug fix suggestions script
         run: python src/bug_fix_suggestions.py
 
   code-review-automation:
