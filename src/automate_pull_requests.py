@@ -2,10 +2,10 @@ import os
 import requests
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-REPO_OWNER = "your-username"
-REPO_NAME = "your-repository"
-HEAD_BRANCH = "feature-branch"
-BASE_BRANCH = "main"
+REPO_OWNER = "Devershi_P"
+REPO_NAME = "pull-request"
+HEAD_BRANCH = "main"
+BASE_BRANCH = "Devershi"
 
 def create_pull_request():
     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/pulls"
